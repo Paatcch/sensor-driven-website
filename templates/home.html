@@ -5,4 +5,21 @@
 {% endblock head %}
 {% block body %}
 <p>HOME</p>
+<form method="POST" action="/home">
+    <label for="CO2">CO2:</label>
+        <input
+          type="text"
+          id="mes"
+          name="CO2mes"
+          placeholder="CO2 mes" required
+        />
+    <label for="TVOC">TVOC:</label>
+        <input
+          type="text"
+          id="TVOCmes"
+          name="TVOCmes"
+          placeholder="TVOC mes" required
+        />
+    <button type="submit">Send</button>
+</form>
 {% endblock body %}

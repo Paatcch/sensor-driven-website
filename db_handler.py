@@ -1,7 +1,7 @@
 """ Implementing helper functions and classes related to databases"""
 import sqlite3
 
-class MessurementsDB:
+class MeasurementsDB:
     """ Handles the messurements database, so it can connect and do queries and insertions """
     db_conn = None
     db_name = None
@@ -19,11 +19,11 @@ class MessurementsDB:
         # measurement is in JSON format
         c.execute(
             f"""
-            CREATE TABLE IF NOT EXIST {self.db_table_name}
+            CREATE TABLE IF NOT EXISTS {self.db_table_name}
                 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                CO2 INTEGER
-                TVOC INTEGER
+                CO2 INTEGER,
+                TVOC INTEGER,
                 time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """
@@ -49,23 +49,22 @@ class MessurementsDB:
         """ Retrieves all measurements from the database """
         c = self.db_conn.cursor()
         c.execute(f"SELECT * from {self.db_table_name} ORDER BY time DESC")
+        c.fetchall()
 
     def get_min(self, mes_type):
         """ Retrieves the smallest measurements of either CO2 or TVOC from the database 
-            mes_type is either "CO2" or "TVOC". 
-            If not the function returns a print statement to the programmer"""
+            mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
             c = self.db_conn.cursor()
             c.execute(f"SELECT MIN({mes_type}) FROM {self.db_table_name}")
             return c.fetchall()
-        print(f"Type must be 'CO2' or 'TVOC'. Not {mes_type}")
+        return None
 
     def get_max(self, mes_type):
         """ Retrieves the largest measurements of either CO2 or TVOC from the database 
-            mes_type is either "CO2" or "TVOC". 
-            If not the function returns a print statement to the programmer"""
+            mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
             c = self.db_conn.cursor()
             c.execute(f"SELECT MAX({mes_type}) FROM {self.db_table_name}")
             return c.fetchall()
-        print(f"Type must be 'CO2' or 'TVOC'. Not {mes_type}")
+        return None
