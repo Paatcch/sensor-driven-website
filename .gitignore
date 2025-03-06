@@ -1,0 +1,6 @@
+# Files and folders to ignore
+*.venv
+*.vscode
+*.idea
+*.db
+__pycache__
