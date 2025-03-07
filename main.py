@@ -36,9 +36,4 @@ def get_db() -> MeasurementsDB: #What?
     return db_conn
 
 if __name__ == "__main__":
-    #Min get_db() virker ikke
-    """print(f"get_measurements: {get_db().get_measurements()}") 
-    print(f"get_min CO2: {get_db().get_min('CO2')}")
-    print(f"get_min TVOC: {get_db().get_min('TVOC')}")"
-    """
     app.run(debug=True)
