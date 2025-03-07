@@ -1,5 +1,6 @@
 """ Implementing helper functions and classes related to databases"""
 import sqlite3
+from typing import List
 
 class MeasurementsDB:
     """ Handles the messurements database, so it can connect and do queries and insertions """
@@ -45,13 +46,14 @@ class MeasurementsDB:
                   VALUES (?, ?)""",(CO2, TVOC))
         self.commit()
 
-    def get_measurements(self):
+    def get_measurements(self) -> List[sqlite3.Row]:
         """ Retrieves all measurements from the database """
         c = self.db_conn.cursor()
-        c.execute(f"SELECT * from {self.db_table_name} ORDER BY time DESC")
-        c.fetchall()
+        c.execute(f"SELECT * FROM {self.db_table_name} ORDER BY time DESC")
+        return c.fetchall()
 
-    def get_min(self, mes_type):
+    def get_min(self, mes_type): #Hvis flere measurements er det samme, skal jeg så returnerer dem alle eller bare en?
+        #Hvis det er alle, skal return være List ligesom get_measurements()
         """ Retrieves the smallest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
