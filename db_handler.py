@@ -17,14 +17,13 @@ class MeasurementsDB:
 
         # AUTOINCREMENT increments id by one every time a new touple is created,
         # if is is not declared in INSERT
-        # measurement is in JSON format
         c.execute(
             f"""
             CREATE TABLE IF NOT EXISTS {self.db_table_name}
                 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                CO2 INTEGER,
-                TVOC INTEGER,
+                CO2 REAL NOT NULL,
+                TVOC REAL NOT NULL,
                 time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """
@@ -39,7 +38,7 @@ class MeasurementsDB:
         """ Closes the connection to the databse """
         self.db_conn.close()
 
-    def add_measurement(self, CO2, TVOC): #skal jeg seriøst skrive det med småt for pylint. co2 gør ondt at kigge på...
+    def add_measurement(self, CO2, TVOC):
         """ Adds a measurement to the database """
         c = self.db_conn.cursor()
         c.execute(f"""INSERT INTO {self.db_table_name} (CO2, TVOC)
@@ -52,21 +51,31 @@ class MeasurementsDB:
         c.execute(f"SELECT * FROM {self.db_table_name} ORDER BY time DESC")
         return c.fetchall()
 
-    def get_min(self, mes_type): #Hvis flere measurements er det samme, skal jeg så returnerer dem alle eller bare en?
-        #Hvis det er alle, skal return være List ligesom get_measurements()
+    def get_min(self, mes_type):
         """ Retrieves the smallest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
-        if mes_type in('CO2', 'TVOC'):
-            c = self.db_conn.cursor()
-            c.execute(f"SELECT MIN({mes_type}) FROM {self.db_table_name}")
-            return c.fetchall()
-        return None
+        return self.get_extreme(mes_type, 'DESC')
 
     def get_max(self, mes_type):
         """ Retrieves the largest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
+        return self.get_extreme(mes_type, 'ASC')
+    
+    def get_latest(self, mes_type):
+        """ Retrieves the latest measurement of either CO2 or TVOC from the database 
+            mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
             c = self.db_conn.cursor()
-            c.execute(f"SELECT MAX({mes_type}) FROM {self.db_table_name}")
-            return c.fetchall()
+            c.execute(f"SELECT {mes_type}, time FROM {self.db_table_name} ORDER BY time DESC LIMIT 1")
+            return c.fetchone()
+        return None
+    
+    def get_extreme(self, mes_type, direction):
+        """ Retrieves the largest/smallets measurements of either CO2 or TVOC from the database 
+            mes_type must either "CO2" or "TVOC"."""
+        if mes_type in('CO2', 'TVOC'):
+            c = self.db_conn.cursor()
+            c.execute(f"SELECT {mes_type}, time FROM {self.db_table_name} ORDER BY {mes_type} {direction}, time DESC LIMIT 1")
+            return c.fetchone()
+        print('You need to write "CO2" or "TVOC" :) ')
         return None

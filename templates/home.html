@@ -2,24 +2,13 @@
 {% block head %}
 <title>Home</title>
 <link rel="stylesheet" href=" {{ url_for('static', filename='style/home.css') }} ">
+<script defer src="/static/js/home.js"></script>
 {% endblock head %}
 {% block body %}
-<p>HOME</p>
-<form method="POST" action="/home">
-    <label for="CO2">CO2:</label>
-        <input
-          type="text"
-          id="mes"
-          name="CO2mes"
-          placeholder="CO2 mes" required
-        />
-    <label for="TVOC">TVOC:</label>
-        <input
-          type="text"
-          id="TVOCmes"
-          name="TVOCmes"
-          placeholder="TVOC mes" required
-        />
-    <button type="submit">Send</button>
-</form>
+<p>Current State</p>
+<div>
+  <h1>eCO2</h1>
+  <p id="latCO2">Latest value: {{latCO2}}</p>
+  <h1>TVOC</h1>
+</div>
 {% endblock body %}

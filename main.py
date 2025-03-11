@@ -8,30 +8,6 @@ app = Flask(__name__)
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     """ Home page (index) of site"""
-    print(json.dumps('99'))
-    if request.method == 'POST':
-        secret_key = request.headers.get('X-secret-key', '')
-        json_params = request.get_json()
-        print(request.get_json())
-        print(json_params['TVOCmes'])
-        print(f"secret-key: {secret_key}")
-        try:
-            if secret_key != 'Znvm9TOxa4rsCWwgMhB43tXroMZxhU1j':
-                return 'Unauthorized', 401
-            try:
-                CO2_mes = int(json_params['CO2mes'])
-            except ValueError:
-                print('Not a number. The measurement will be Null')
-                CO2_mes = None
-            try:
-                TVOC_mes = int(json_params['TVOCmes'])
-            except ValueError:
-                print('Not a number. The measurement will be Null')
-                TVOC_mes = None
-            get_db().add_measurement(CO2_mes, TVOC_mes)
-            return redirect(url_for('home'))
-        except (KeyError, TypeError):
-            return "Invalid JSON", 400
     return render_template("home.html")
 
 @app.route("/measurements")
@@ -42,6 +18,29 @@ def view_measurements():
     print(f"get_min CO2: {get_db().get_min('CO2')}")
     print(f"get_min TVOC: {get_db().get_min('TVOC')}")
     return render_template("measurements.html")
+
+@app.route('/updateMeasurements', methods=['GET', 'PUT'])
+def update_mes() -> str:
+    """ Adds measurements to db or extracts information from db. Not visited by users"""
+    if request.method == 'PUT':
+        secret_key = request.headers.get('X-secret-key', '')
+        json_params = request.get_json()
+        try:
+            if secret_key != 'Znvm9TOxa4rsCWwgMhB43tXroMZxhU1j':
+                return 'Unauthorized', 401
+            try:
+                CO2_mes = int(json_params['CO2mes'])
+                TVOC_mes = int(json_params['TVOCmes'])
+            except ValueError:
+                return 'Measurement is not a number', 422
+            get_db().add_measurement(CO2_mes, TVOC_mes)
+        except (KeyError, TypeError):
+            return "Invalid JSON", 400
+    return jsonify({'allMes': get_db().get_measurements(),
+                    'latCO2': get_db().get_latest('CO2'), 'latTVOC': get_db().get_latest('TVOC'),
+                    'minCO2': get_db().get_min('CO2'), 'minTVOC': get_db().get_min('TVOC'),
+                    'maxCO2': get_db().get_max('CO2'), 'maxTVOC': get_db().get_max('TVOC')
+                    })
 
 @app.route("/min")
 def get_min():
