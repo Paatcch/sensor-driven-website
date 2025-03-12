@@ -54,12 +54,12 @@ class MeasurementsDB:
     def get_min(self, mes_type):
         """ Retrieves the smallest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
-        return self.get_extreme(mes_type, 'DESC')
+        return self.get_extreme(mes_type, 'ASC')
 
     def get_max(self, mes_type):
         """ Retrieves the largest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
-        return self.get_extreme(mes_type, 'ASC')
+        return self.get_extreme(mes_type, 'DESC')
     
     def get_latest(self, mes_type):
         """ Retrieves the latest measurement of either CO2 or TVOC from the database 

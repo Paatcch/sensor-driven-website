@@ -4,5 +4,22 @@
 <link rel="stylesheet" href=" {{ url_for('static', filename='style/measurements.css') }} ">
 {% endblock head %}
 {% block body %}
-<p>MEASUREMENTS</p>
+<h1>ALL MEASUREMENTS</h1>
+<div id="allMes">
+  {% if list %}
+    {% for mes in list %}
+        {% if mes %}
+  <div class="allMeasurementContainer">
+    <div class="measurement">
+      <p>eCO2 value: {{mes[1]}}</p>
+      <p>TVOC value: {{mes[2]}}</p>
+      <p>Time: {{mes[3]}}</p>
+    </div>
+  </div>
+  {% endif %}
+    {% endfor %}
+  {% else %}
+  <p>No messages to show.</p>
+  {% endif %}
+</div>
 {% endblock body %}

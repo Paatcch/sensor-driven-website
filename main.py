@@ -1,5 +1,5 @@
 """ Running a webserver to show measurements on air quality obtained by sensors on a m5Stack"""
-from flask import Flask, render_template, request, g, redirect, url_for, json, jsonify
+from flask import Flask, render_template, request, g, jsonify
 from db_handler import MeasurementsDB
 
 app = Flask(__name__)
@@ -13,31 +13,28 @@ def home():
 @app.route("/measurements")
 def view_measurements():
     """ Site to show all the measurements"""
-    for e in get_db().get_measurements():
-        print(f"get_measurements: {e}")
-    print(f"get_min CO2: {get_db().get_min('CO2')}")
-    print(f"get_min TVOC: {get_db().get_min('TVOC')}")
-    return render_template("measurements.html")
+    return render_template('measurements.html', list = get_db().get_measurements())
 
-@app.route('/updateMeasurements', methods=['GET', 'PUT'])
+@app.route('/updateMeasurements', methods=['GET', 'POST'])
 def update_mes() -> str:
     """ Adds measurements to db or extracts information from db. Not visited by users"""
-    if request.method == 'PUT':
+    if request.method == 'POST':
         secret_key = request.headers.get('X-secret-key', '')
         json_params = request.get_json()
         try:
             if secret_key != 'Znvm9TOxa4rsCWwgMhB43tXroMZxhU1j':
                 return 'Unauthorized', 401
             try:
+                print('here')
                 CO2_mes = int(json_params['CO2mes'])
+                print(CO2_mes)
                 TVOC_mes = int(json_params['TVOCmes'])
             except ValueError:
                 return 'Measurement is not a number', 422
             get_db().add_measurement(CO2_mes, TVOC_mes)
         except (KeyError, TypeError):
             return "Invalid JSON", 400
-    return jsonify({'allMes': get_db().get_measurements(),
-                    'latCO2': get_db().get_latest('CO2'), 'latTVOC': get_db().get_latest('TVOC'),
+    return jsonify({'latCO2': get_db().get_latest('CO2'), 'latTVOC': get_db().get_latest('TVOC'),
                     'minCO2': get_db().get_min('CO2'), 'minTVOC': get_db().get_min('TVOC'),
                     'maxCO2': get_db().get_max('CO2'), 'maxTVOC': get_db().get_max('TVOC')
                     })
