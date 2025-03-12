@@ -22,8 +22,8 @@ class MeasurementsDB:
             CREATE TABLE IF NOT EXISTS {self.db_table_name}
                 (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                CO2 REAL NOT NULL,
-                TVOC REAL NOT NULL,
+                CO2 INTEGER NOT NULL,
+                TVOC INTEGER NOT NULL,
                 time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """
