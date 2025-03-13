@@ -2,7 +2,13 @@ body{
     background-color: bisque;
 }
 
-.measurementContainer
+.linkContainer{
+    background-color: aqua;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
 
 .measurement{
     background-color: rgb(226, 203, 176);

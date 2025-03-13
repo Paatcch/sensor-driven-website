@@ -4,6 +4,9 @@
 <link rel="stylesheet" href=" {{ url_for('static', filename='style/measurements.css') }} ">
 {% endblock head %}
 {% block body %}
+<div class="linkContainer">
+  <a href="/home">Get overview</a>
+</div>
 <h1>ALL MEASUREMENTS</h1>
 <div id="allMes">
   {% if list %}
