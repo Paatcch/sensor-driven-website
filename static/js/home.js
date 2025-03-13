@@ -27,6 +27,10 @@ function getMeasurements(){
         if(request.status === 200){
             const response = JSON.parse(request.responseText)
 
+            if(response.latCO2[0] === '' || null){
+                console.log(`was empty or null: ${response.latCO2[0]}`)
+            }
+            console.log(`was NOT empty or null: ${response.latCO2[0]}`)
             latCO2.textContent = `Latest value: ${response.latCO2[0]}`;
             latCO2_time.textContent = `Time: ${to_local_time(response.latCO2[1])}`;
             latTVOC.textContent = `Latest value: ${to_local_time(response.latTVOC[0])}`;
