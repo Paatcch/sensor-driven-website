@@ -46,8 +46,9 @@ function getMeasurements(){
 
 //converts the time in UTC from the databse to the local time dependent on where the user is.
 function to_local_time(UTC_time){
-    const time_UTC_obj = new Date(UTC_time.time);
-    const time_local_obj = new Date(time_UTC_obj.getTime() - time_offSet_in_ms)
+    const time_UTC_obj = new Date(UTC_time);
+    const time_local_obj = new Date(time_UTC_obj.getTime() - time_offSet_in_ms);
+    console.log(time_local_obj.toLocaleString());
     return time_local_obj.toLocaleString();
 }
 
