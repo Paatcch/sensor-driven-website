@@ -24,22 +24,26 @@ function getMeasurements(){
     request.open('GET', '/updateMeasurements', true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = function(){
-        const response = JSON.parse(request.responseText)
+        if(request.status === 200){
+            const response = JSON.parse(request.responseText)
 
-        latCO2.textContent = `Latest value: ${response.latCO2[0]}`;
-        latCO2_time.textContent = `Time: ${to_local_time(response.latCO2[1])}`;
-        latTVOC.textContent = `Latest value: ${to_local_time(response.latTVOC[0])}`;
-        latTVOC_time.textContent = `Time: ${ response.latTVOC[1]}`;
-
-        maxCO2.textContent = `Maximum value: ${response.maxCO2[0]}`;
-        maxCO2_time.textContent = `Time: ${to_local_time(response.maxCO2[1])}`;
-        maxTVOC.textContent = `Maximum value: ${response.maxTVOC[0]}`;
-        maxTVOC_time.textContent = `Time: ${to_local_time(response.maxTVOC[1])}`;
-        
-        minCO2.textContent = `Minimum value: ${response.minCO2[0]}`;
-        minCO2_time.textContent = `Time: ${to_local_time(response.minCO2[1])}`;
-        minTVOC.textContent = `Minimum value: ${response.minTVOC[0]}`;
-        minTVOC_time.textContent = `Time: ${to_local_time(response.minTVOC[1])}`;
+            latCO2.textContent = `Latest value: ${response.latCO2[0]}`;
+            latCO2_time.textContent = `Time: ${to_local_time(response.latCO2[1])}`;
+            latTVOC.textContent = `Latest value: ${to_local_time(response.latTVOC[0])}`;
+            latTVOC_time.textContent = `Time: ${ response.latTVOC[1]}`;
+    
+            maxCO2.textContent = `Maximum value: ${response.maxCO2[0]}`;
+            maxCO2_time.textContent = `Time: ${to_local_time(response.maxCO2[1])}`;
+            maxTVOC.textContent = `Maximum value: ${response.maxTVOC[0]}`;
+            maxTVOC_time.textContent = `Time: ${to_local_time(response.maxTVOC[1])}`;
+            
+            minCO2.textContent = `Minimum value: ${response.minCO2[0]}`;
+            minCO2_time.textContent = `Time: ${to_local_time(response.minCO2[1])}`;
+            minTVOC.textContent = `Minimum value: ${response.minTVOC[0]}`;
+            minTVOC_time.textContent = `Time: ${to_local_time(response.minTVOC[1])}`;
+        }else{
+            console.error(`ERROR: ${request.status}`)
+        }
     };
     request.send();
 }
