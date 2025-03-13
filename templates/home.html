@@ -9,50 +9,53 @@
   <a href="/measurements">See all measurements</a>
 </div>
 <h1>Current State</h1>
-<div class="measurementContainer">
-  <h2>eCO2</h2>
-  <div class="measurement">
-    <p id="latCO2">Latest value: No data</p>
-    <p id="latCO2_time">Time:</p>
+<p hidden id="NoDataMessage">No measurements to show. Connect gas sensor to get data.</p>
+<div id="outerContainerForMeasurements">
+  <div class="measurementContainer">
+    <h2>eCO2</h2>
+    <div class="measurement">
+      <p id="latCO2">Latest value: No data</p>
+      <p id="latCO2_time">Time:</p>
+    </div>
   </div>
-</div>
-<div class="measurementContainer">
-  <h2>TVOC</h2>
-  <div class="measurement">
-    <p id="latTVOC">Latest value: No data</p>
-    <p id="latTVOC_time">Time:</p>
+  <div class="measurementContainer">
+    <h2>TVOC</h2>
+    <div class="measurement">
+      <p id="latTVOC">Latest value: No data</p>
+      <p id="latTVOC_time">Time:</p>
+    </div>
   </div>
-</div>
-<!-- ------------------------------------------------------------ -->
-<h1>Maximum values</h1>
-<div class="measurementContainer">
-  <h2>eCO2</h2>
-  <div class="measurement">
-    <p id="maxCO2">Maximum value: No data</p>
-    <p id="maxCO2_time">Time:</p>
+  <!-- ------------------------------------------------------------ -->
+  <h1>Maximum values</h1>
+  <div class="measurementContainer">
+    <h2>eCO2</h2>
+    <div class="measurement">
+      <p id="maxCO2">Maximum value: No data</p>
+      <p id="maxCO2_time">Time:</p>
+    </div>
   </div>
-</div>
-<div class="measurementContainer">
-  <h2>TVOC</h2>
-  <div class="measurement">
-    <p id="maxTVOC">Maximum value: No data</p>
-    <p id="maxTVOC_time">Time:</p>
+  <div class="measurementContainer">
+    <h2>TVOC</h2>
+    <div class="measurement">
+      <p id="maxTVOC">Maximum value: No data</p>
+      <p id="maxTVOC_time">Time:</p>
+    </div>
   </div>
-</div>
-<!-- ------------------------------------------------------------ -->
-<h1>Minimum values</h1>
-<div class="measurementContainer">
-  <h2>eCO2</h2>
-  <div class="measurement">
-    <p id="minCO2">Minimum value: No data</p>
-    <p id="minCO2_time">Time:</p>
+  <!-- ------------------------------------------------------------ -->
+  <h1>Minimum values</h1>
+  <div class="measurementContainer">
+    <h2>eCO2</h2>
+    <div class="measurement">
+      <p id="minCO2">Minimum value: No data</p>
+      <p id="minCO2_time">Time:</p>
+    </div>
   </div>
-</div>
-<div class="measurementContainer">
-  <h2>TVOC</h2>
-  <div class="measurement">
-    <p id="minTVOC">Minimum value: No data</p>
-    <p id="minTVOC_time">Time:</p>
+  <div class="measurementContainer">
+    <h2>TVOC</h2>
+    <div class="measurement">
+      <p id="minTVOC">Minimum value: No data</p>
+      <p id="minTVOC_time">Time:</p>
+    </div>
   </div>
 </div>
 {% endblock body %}

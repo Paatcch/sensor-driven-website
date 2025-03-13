@@ -4,6 +4,10 @@
 //Get the timezone offset in milliseconds
 const time_offSet_in_ms = new Date().getTimezoneOffset()*60*1000;
 
+//parts that should be hidden or shown depending on if there is data in the database
+const no_data_message = document.querySelector('#NoDataMessage');
+const outer_container_for_measurements = document.querySelector('#outerContainerForMeasurements');
+
 const latCO2 = document.querySelector('#latCO2');
 const latCO2_time = document.querySelector('#latCO2_time');
 const latTVOC = document.querySelector('#latTVOC');
@@ -25,15 +29,17 @@ function getMeasurements(){
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = function(){
         if(request.status === 200){
-            const response = JSON.parse(request.responseText)
-            if(!response.latCO2 || !response.latTVOC){ //Hvorfor er det ikke (!response)?
-                console.log(`was empty or null: `)
+            const response = JSON.parse(request.responseText);
+            if(!response.latCO2 || !response.latTVOC){ //If there are no data in the database
+                no_data_message.removeAttribute('hidden');
+                outer_container_for_measurements.setAttribute('hidden', '');
             }else{
-                console.log(`was NOT empty or null: `)
+                no_data_message.setAttribute('hidden', '');
+                outer_container_for_measurements.removeAttribute('hidden');
                 latCO2.textContent = `Latest value: ${response.latCO2[0]}`;
                 latCO2_time.textContent = `Time: ${to_local_time(response.latCO2[1])}`;
-                latTVOC.textContent = `Latest value: ${to_local_time(response.latTVOC[0])}`;
-                latTVOC_time.textContent = `Time: ${ response.latTVOC[1]}`;
+                latTVOC.textContent = `Latest value: ${response.latTVOC[0]}`;
+                latTVOC_time.textContent = `Time: ${to_local_time(response.latTVOC[1])}`;
         
                 maxCO2.textContent = `Maximum value: ${response.maxCO2[0]}`;
                 maxCO2_time.textContent = `Time: ${to_local_time(response.maxCO2[1])}`;
@@ -46,7 +52,7 @@ function getMeasurements(){
                 minTVOC_time.textContent = `Time: ${to_local_time(response.minTVOC[1])}`;
             }
         }else{
-            console.error(`ERROR: ${request.status}`)
+            console.error(`ERROR: ${request.status}`);
         }
     };
     request.send();
