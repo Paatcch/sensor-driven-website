@@ -60,22 +60,24 @@ class MeasurementsDB:
         """ Retrieves the largest measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
         return self.get_extreme(mes_type, 'DESC')
-    
+
     def get_latest(self, mes_type):
         """ Retrieves the latest measurement of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
             c = self.db_conn.cursor()
-            c.execute(f"SELECT {mes_type}, time FROM {self.db_table_name} ORDER BY time DESC LIMIT 1")
+            c.execute(f"""SELECT {mes_type}, time FROM {self.db_table_name}
+                      ORDER BY time DESC LIMIT 1""")
             return c.fetchone()
         return None
-    
+
     def get_extreme(self, mes_type, direction):
         """ Retrieves the largest/smallets measurements of either CO2 or TVOC from the database 
             mes_type must either "CO2" or "TVOC"."""
         if mes_type in('CO2', 'TVOC'):
             c = self.db_conn.cursor()
-            c.execute(f"SELECT {mes_type}, time FROM {self.db_table_name} ORDER BY {mes_type} {direction}, time DESC LIMIT 1")
+            c.execute(f"""SELECT {mes_type}, time FROM {self.db_table_name}
+                      ORDER BY {mes_type} {direction}, time DESC LIMIT 1""")
             return c.fetchone()
         print('You need to write "CO2" or "TVOC" :) ')
         return None
