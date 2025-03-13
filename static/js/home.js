@@ -1,6 +1,9 @@
 "use strict";
 /* global document XLMHttpRequest */
 
+//Get the timezone offset in milliseconds
+const time_offSet_in_ms = new Date().getTimezoneOffset()*60*1000;
+
 const latCO2 = document.querySelector('#latCO2');
 const latCO2_time = document.querySelector('#latCO2_time');
 const latTVOC = document.querySelector('#latTVOC');
@@ -29,9 +32,9 @@ function getMeasurements(){
         latTVOC_time.textContent = `Time: ${ response.latTVOC[1]}`;
 
         maxCO2.textContent = `Maximum value: ${response.maxCO2[0]}`;
-        maxCO2_time.textContent = `Time: ${response.maxCO2[1]}`;
+        maxCO2_time.textContent = `Time: ${to_local_time(response.maxCO2[1])}`;
         maxTVOC.textContent = `Maximum value: ${response.maxTVOC[0]}`;
-        maxTVOC_time.textContent = `Time: ${response.maxTVOC[1]}`;
+        maxTVOC_time.textContent = `Time: ${to_local_time(response.maxTVOC[1])}`;
         
         minCO2.textContent = `Minimum value: ${response.minCO2[0]}`;
         minCO2_time.textContent = `Time: ${response.minCO2[1]}`;
@@ -39,6 +42,13 @@ function getMeasurements(){
         minTVOC_time.textContent = `Time: ${response.minTVOC[1]}`;
     };
     request.send();
+}
+
+//converts the time in UTC from the databse to the local time dependent on where the user is.
+function to_local_time(UTC_time){
+    const time_UTC_obj = new Date(UTC_time.time);
+    const time_local_obj = new Date(time_UTC_obj.getTime() - time_offSet_in_ms)
+    return time_local_obj.toLocaleString();
 }
 
 if (latCO2, latCO2_time, latTVOC, latTVOC_time, minCO2, minCO2_time,
