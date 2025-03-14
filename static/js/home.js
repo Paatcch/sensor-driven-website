@@ -11,7 +11,6 @@ const outer_container_for_measurements = document.querySelector('#outerContainer
 const latCO2 = document.querySelector('#latCO2');
 const latCO2_time = document.querySelector('#latCO2_time');
 const latTVOC = document.querySelector('#latTVOC');
-const latTVOC_time = document.querySelector('#latTVOC_time');
 
 const maxCO2 = document.querySelector('#maxCO2');
 const maxCO2_time = document.querySelector('#maxCO2_time');
@@ -36,10 +35,10 @@ function getMeasurements(){
             }else{
                 no_data_message.setAttribute('hidden', '');
                 outer_container_for_measurements.removeAttribute('hidden');
+                
                 latCO2.textContent = response.latCO2[0];
                 latCO2_time.textContent = to_local_time(response.latCO2[1]);
                 latTVOC.textContent = response.latTVOC[0];
-                latTVOC_time.textContent = to_local_time(response.latTVOC[1]);
         
                 maxCO2.textContent = response.maxCO2[0];
                 maxCO2_time.textContent = to_local_time(response.maxCO2[1]);
@@ -62,11 +61,10 @@ function getMeasurements(){
 function to_local_time(UTC_time){
     const time_UTC_obj = new Date(UTC_time);
     const time_local_obj = new Date(time_UTC_obj.getTime() - time_offSet_in_ms);
-    console.log(time_local_obj.toLocaleString());
     return time_local_obj.toLocaleString();
 }
 
-if (latCO2, latCO2_time, latTVOC, latTVOC_time, minCO2, minCO2_time,
+if (latCO2, latCO2_time, latTVOC, minCO2, minCO2_time,
      minTVOC, minTVOC_time, maxCO2, maxCO2_time, maxTVOC, maxTVOC_time){
     setInterval(getMeasurements, 60000);
     getMeasurements();
