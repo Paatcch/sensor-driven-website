@@ -68,7 +68,7 @@ function to_local_time(UTC_time){
 
 if (latCO2, latCO2_time, latTVOC, latTVOC_time, minCO2, minCO2_time,
      minTVOC, minTVOC_time, maxCO2, maxCO2_time, maxTVOC, maxTVOC_time){
-    setInterval(getMeasurements, 3000);
+    setInterval(getMeasurements, 60000);
     getMeasurements();
 }
 
