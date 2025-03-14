@@ -7,20 +7,25 @@
 <div class="linkContainer">
   <a href="/home">Get overview</a>
 </div>
-<h1>ALL MEASUREMENTS</h1>
+<h1>All Measurements</h1>
 <div id="allMes">
   {% if list %}
+  <table>
+    <tr>
+      <th>eCO2</th>
+      <th>TVOC</th>
+      <th>Time</th>
+    </tr>
     {% for mes in list %}
         {% if mes %}
-  <div class="allMeasurementContainer">
-    <div class="measurement">
-      <p>eCO2 value: {{mes[1]}}</p>
-      <p>TVOC value: {{mes[2]}}</p>
-      <p>Time: {{mes[3]}}</p>
-    </div>
-  </div>
-  {% endif %}
+    <tr>
+      <td>{{mes[1]}}</td>
+      <td>{{mes[2]}}</td>
+      <td>{{mes[3]}}</td>
+    </tr>
+    {% endif %}
     {% endfor %}
+  </table>
   {% else %}
   <p>No measurements to show. Connect gas sensor to get data.</p>
   {% endif %}

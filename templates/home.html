@@ -11,50 +11,74 @@
 <h1>Current State</h1>
 <p hidden id="NoDataMessage">No measurements to show. Connect gas sensor to get data.</p>
 <div id="outerContainerForMeasurements">
-  <div class="measurementContainer">
-    <h2>eCO2</h2>
-    <div class="measurement">
-      <p id="latCO2">Latest value: No data</p>
-      <p id="latCO2_time">Time:</p>
-    </div>
-  </div>
-  <div class="measurementContainer">
-    <h2>TVOC</h2>
-    <div class="measurement">
-      <p id="latTVOC">Latest value: No data</p>
-      <p id="latTVOC_time">Time:</p>
-    </div>
-  </div>
+  <table>
+    <tr>
+      <th>eCO2</th>
+      <th>TVOC</th>
+      <th>Time</th>
+    </tr>
+    <tr>
+      <td id="latCO2">No data</td>
+      <td id="latTVOC">No data</td>
+      <td id="latCO2_time"></td>
+    </tr>
+  </table>
   <!-- ------------------------------------------------------------ -->
   <h1>Maximum values</h1>
-  <div class="measurementContainer">
-    <h2>eCO2</h2>
-    <div class="measurement">
-      <p id="maxCO2">Maximum value: No data</p>
-      <p id="maxCO2_time">Time:</p>
-    </div>
-  </div>
-  <div class="measurementContainer">
-    <h2>TVOC</h2>
-    <div class="measurement">
-      <p id="maxTVOC">Maximum value: No data</p>
-      <p id="maxTVOC_time">Time:</p>
+  <div class="sideTables1">
+    <div class="sideTables2">
+      <table>
+        <tr>
+          <th>eCO2</th>
+        </tr>
+        <tr>
+          <td id="maxCO2">No data</td>
+        </tr>
+        <tr>
+          <td id="maxCO2_time">No data</td>
+        </tr>
+      </table>
+      <div class="spaceBox"></div>
+      <table>
+        <tr>
+          <th>TVOC</th>
+        </tr>
+        <tr>
+          <td id="maxTVOC">No data</td>
+        </tr>
+        <tr>
+          <td id="maxTVOC_time">No data</td>
+        </tr>
+      </table>
     </div>
   </div>
   <!-- ------------------------------------------------------------ -->
   <h1>Minimum values</h1>
-  <div class="measurementContainer">
-    <h2>eCO2</h2>
-    <div class="measurement">
-      <p id="minCO2">Minimum value: No data</p>
-      <p id="minCO2_time">Time:</p>
-    </div>
-  </div>
-  <div class="measurementContainer">
-    <h2>TVOC</h2>
-    <div class="measurement">
-      <p id="minTVOC">Minimum value: No data</p>
-      <p id="minTVOC_time">Time:</p>
+  <div class="sideTables1">
+    <div class="sideTables2">
+      <table>
+        <tr>
+          <th class="header">eCO2</th>
+        </tr>
+        <tr>
+          <td id="minCO2">No data</td>
+        </tr>
+        <tr>
+          <td id="minCO2_time">No data</td>
+        </tr>
+      </table>
+      <div class="spaceBox"></div>
+      <table>
+        <tr>
+          <th class="header">TVOC</th>
+        </tr>
+        <tr>
+          <td id="minTVOC">No data</td>
+        </tr>
+        <tr>
+          <td id="minTVOC_time">No data</td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>

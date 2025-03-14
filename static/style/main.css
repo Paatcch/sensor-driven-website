@@ -1,18 +1,85 @@
 body{
-    background-color: bisque;
+    background-color: white;
+    font-family: sans-serif;
+}
+
+h1{
+    margin-top: 60px;
+    color: #282c4d;
+    text-align: center;
 }
 
 .linkContainer{
-    background-color: aqua;
-    width: fit-content;
+    background-color: #282c4d;
+    width: 20vw;
     padding: 10px;
     border-radius: 5px;
+    text-align: center;
+}
+
+a{
     text-decoration: none;
+    font-weight: bold;
+    color: white;
 }
 
 .measurement{
     background-color: rgb(226, 203, 176);
-    width: 30vw; /* skal måske gøres på en anden måde*/
+    width: 30vw;
     display: flex;
     justify-content: space-between;
+}
+
+table{
+    font-family: sans-serif;
+    border-collapse: collapse;
+    width: 70%;
+    margin: 0 auto;
+}
+
+td,th{
+    padding: 8px;
+    padding-left: 20px;
+}
+
+tr{
+    text-align: left;
+    background-color: rgb(247, 247, 255);
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+tr:nth-child(even){
+    background-color: #d8dcf0;
+}
+
+tr:hover{
+    background-color: #babde1;  
+}
+
+th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 20px;
+    text-align: left;
+    background-color: #282c4d;
+    color: rgb(255, 255, 255);
+}
+
+.sideTables1{
+    display: table;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.sideTables2{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    width: 40vw;
+}
+
+.spaceBox{
+    padding: 20px;
 }
