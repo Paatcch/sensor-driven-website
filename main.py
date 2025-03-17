@@ -4,8 +4,8 @@ from db_handler import MeasurementsDB
 
 app = Flask(__name__)
 
-@app.route("/", methods=['GET', 'POST'])
-@app.route("/home", methods=['GET', 'POST'])
+@app.route("/")
+@app.route("/home")
 def home():
     """ Home page (index) of site"""
     return render_template("home.html")
@@ -38,16 +38,6 @@ def update_mes() -> str:
                     'minCO2': get_db().get_min('CO2'), 'minTVOC': get_db().get_min('TVOC'),
                     'maxCO2': get_db().get_max('CO2'), 'maxTVOC': get_db().get_max('TVOC')
                     })
-
-@app.route("/min")
-def get_min():
-    """ Returns the minimum value from the database"""
-    return jsonify({'CO2': get_db().get_min('CO2'), 'TVOC': get_db().get_min('TVOC')})
-
-@app.route("/max")
-def get_max():
-    """ Returns the maximum value from the database"""
-    return jsonify({'CO2': get_db().get_max('CO2'), 'TVOC': get_db().get_max('TVOC')})
 
 def get_db() -> MeasurementsDB:
     """ Make database connection and store in Flask app context"""
