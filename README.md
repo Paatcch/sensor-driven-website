@@ -1,93 +1,70 @@
-# Assignment_6_Robin
+# Sensor-driven Website (M5Stick TVOC/eCO₂ logger)
 
+A simple IoT web application that collects TVOC and eCO₂ measurements from an M5Stick device and shows them on a server-rendered website. The device posts measurements to the server once per minute and the server validates and stores them in a local SQLite database and serves two HTML pages: a front page with the latest + min/max values and a measurements page with all recorded data.
 
+This is a project from the 2. semester course 'The Web of Things' at Aarhus University. The goal of the project was to get a general understanding of the technologies in the best case scenario. Therefore testing, error handling and security is simple or non-existing.
 
-## Getting started
+<img width="416" height="549" alt="Skærmbillede (30)" src="https://github.com/user-attachments/assets/42bceb0b-13a1-4c68-9ad8-ebda82f72fb8" />
+<img width="1312" height="649" alt="image" src="https://github.com/user-attachments/assets/2da03987-571f-4e6a-a98e-e35c54fd7e28" />
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+---
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Project summary
+---------------
+- Device: M5Stick (UIFlow) with gas sensor (TVOC and eCO₂) + PIR for display control.
+- Device behavior: reads sensor once per minute, shows latest and local min/max on device, uses PIR to toggle backlight, and posts measurements to the server via HTTP.
+- Server: Flask app that accepts device measurements, stores validated readings in an SQLite database, and serves two HTML pages (front page and measurements page).
+- Browser/Remote+: Front page auto-refreshes once per minute and shows latest/min/max; measurements page lists all entries.
 
-## Add your files
+Repository structure (key files)
+-------------------------------
+- main.py — Flask app (routes, API endpoint, DB connection management)
+- db_handler.py — MeasurementsDB class: manages SQLite connection, table creation, insertion, queries
+- templates/
+  - base.html — base Jinja template
+  - home.html — front page (latest, min, max; references static/js/home.js)
+  - measurements.html — page listing all measurements
+- static/js/home.js — front-page client script; polls the server (GET /updateMeasurements) every 60s and updates the DOM
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+API (endpoints and payloads)
+----------------------------
+- GET / or /home
+  - Renders the front page (templates/home.html). The front page loads static/js/home.js which itself calls GET /updateMeasurements.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.au.dk/rainbow-dash-wot25/assignment_6_robin.git
-git branch -M main
-git push -uf origin main
-```
+- GET /measurements
+  - Renders the measurements page (templates/measurements.html) and passes all measurements returned by MeasurementsDB.get_measurements().
 
-## Integrate with your tools
+- GET /updateMeasurements
+  - Used by the front page script to fetch summary data (latest, min, max).
+  - Response is JSON with the following fields (each returned as a SQL row tuple or null):
+    - latCO2: [CO2_value, timestamp]
+    - latTVOC: [TVOC_value, timestamp]
+    - minCO2: [CO2_value, timestamp]
+    - minTVOC: [TVOC_value, timestamp]
+    - maxCO2: [CO2_value, timestamp]
+    - maxTVOC: [TVOC_value, timestamp]
 
-- [ ] [Set up project integrations](https://gitlab.au.dk/rainbow-dash-wot25/assignment_6_robin/-/settings/integrations)
+- POST /updateMeasurements
+  - Used by the device to submit new measurements.
+  - Required header: X-secret-key with the server-side secret. The key is currently hardcoded, and provides no security
+  - POST JSON body fields (exact names expected by the server):
+  - Responses:
+    - 401 Unauthorized — if header X-secret-key does not match.
+    - 400 Invalid JSON — missing or malformed JSON.
+    - 422 Measurement is not a number — if the values cannot be cast to int.
+    - 200 OK — on success; returns the same JSON payload as the GET (latest/min/max).
 
-## Collaborate with your team
+Database
+--------
+- File: Measurements.db (created by MeasurementsDB, default name "Measurements.db")
+- Table (measurements) columns:
+  - id INTEGER PRIMARY KEY AUTOINCREMENT
+  - CO2 INTEGER NOT NULL
+  - TVOC INTEGER NOT NULL
+  - time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+- Queries implemented in db_handler.py:
+  - add_measurement(CO2, TVOC)
+  - get_measurements() — returns all rows ORDER BY time DESC
+  - get_latest(mes_type) — latest CO2 or TVOC
+  - get_min(mes_type) / get_max(mes_type)
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
